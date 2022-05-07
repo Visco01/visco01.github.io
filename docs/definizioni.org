@@ -1,0 +1,42 @@
+#+title: Definizioni generali sui grafi
+    Dati G = (V,E) dove G è un grafo, V è l'insieme dei nodi ed E è l'insieme degli archi:
+
+** Cammino
+#+begin_quote
+Un cammino corrisponde al *numero di archi* interposti tra un nodo sorgente e un nodo destinazione.
+@@html:<br>@@
+Un cammino è detto *semplice* quando tutti i vertici sono distinti.
+#+end_quote
+
+** Componente connessa
+#+begin_quote
+Una componente connessa è un sottoinsieme del grafo in cui tutti i nodi risultano *raggiungibili*
+@@html:<br>@@
+(essa può corrispondere al grafo stesso)
+@@html:<br>@@
+Non esiste un sottografo connesso più grande della componente connessa
+#+end_quote
+
+** Completezza di un grafo
+#+begin_quote
+1) *Vuoto* se E è un insieme vuoto
+2) *Completo* se E = VxV
+#+end_quote
+
+** Densità di un grafo
+#+begin_quote
+1) Se G è *non orientato*, allora *δ(G) = |E| / (numero di archi possibili)*
+2) Se G è *orientato*, *δ(G) = |E| / |V|^2*
+#+end_quote
+
+** Foresta
+#+begin_quote
+Una foresta è un grafo connesso e aciclico
+#+end_quote
+
+** Grado di un vertice
+#+begin_quote
+Coming soon...
+#+end_quote
+
+[[file:../index.org][HOME]]

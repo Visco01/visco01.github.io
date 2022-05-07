@@ -4,4 +4,5 @@
 Spero di non doverlo rifare
 
 * Modulo 2
+** [[file:docs/definizioni.org][Definizioni generali sui grafi]]
 ** [[file:docs/dijkstra.org][Algoritmo di Djikstra]]
