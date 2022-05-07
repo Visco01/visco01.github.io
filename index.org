@@ -1,0 +1,7 @@
+#+title: Algoritmi e Strutture Dati
+
+* Modulo 1
+Spero di non doverlo rifare
+
+* Modulo 2
+** [[file:docs/dijkstra.org][Algoritmo di Djikstra]]
