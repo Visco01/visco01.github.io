@@ -1,0 +1,113 @@
+#+title: MST e Algoritmo di Kruskal
+#+MACRO: color @@html:<font color="$1">$2</font>@@
+
+** Minimum Spanning Tree (MST)
+#+begin_quote
+Uno Spanning Tree è un albero che *ricopre tutti i nodi*.
+@@html:<br>@@
+Uno Spanning Tree è uno MST se il peso del suddetto albero è minimo tra tutti gli altri Spanning Tree.
+#+end_quote
+
+
+** Algoritmo GENERIC-MST
+#+begin_src cpp
+/*
+G = grafo
+w = funzione peso
+,*/
+GENERIC-MST(G, w){
+    A <- NIL
+
+    while(|A| < |V| - 1){
+        Trova un arco sicuro per A (u, v)
+        A <- A U {(u, v)}
+    }
+
+    return A
+}
+#+end_src
+
+
+** Teorema fondamentale degli MST<<teorema>>
+#+begin_quote
+Sia G = (V, E, w) un grafo non orientato, pesato e connesso.
+Siano:
+1) A sottoinsieme di E contenuto in qualche MST
+2) (S, V-s) taglio rispetto ad A (nessuno degli archi di A attraversa il taglio)
+3) (u, v) ∈ E è un arco leggero che attraversa il taglio
+
+*Allora, l'arco (u, v) è sicuro per A.*
+@@html:<br>@@
+A U {(u, v)} è contenuto in qualche MST.
+#+end_quote
+
+
+** Strutture dati per insiemi disgiunti
+#+begin_src cpp
+MAKE_SET(x) -> return {X}
+
+UNION(x, y) -> Sx U Sy
+
+FIND_SET(x) -> return rappresentante dell'insieme che contiene x
+#+end_src
+
+
+** Algoritmo CONNECTED_COMPONENTS
+#+begin_src cpp
+/*
+G = grafo
+,*/
+CONNECTED_COMPONENTS(G){
+    for each v in V[G]{
+        MAKE_SET(v)
+    }
+
+    for each (u, v) in E[G]{
+        if(FIND_SET(u) != FIND_SET(v)){
+            UNION(u, v)
+        }
+    }
+}
+#+end_src
+
+
+** Algoritmo di Kruskal
+#+begin_src cpp
+/*
+G = grafo
+w = funzione peso
+,*/
+MST-KRUSKAL(G, w){
+    //INIZIALIZZAZIONE
+    A <- NIL
+    for each u in V[G]{
+        MAKE_SET(u)
+    }
+
+    //ORDINAMENTO DEI PESI IN ORDINE NON DECRESCENTE
+    SORT(E[G])
+
+    //CODICE SIMILE A CONNECTED_COMPONENTS
+    for each (u, v) in E[G]{
+        if(FIND_SET(u) != FIND_SET(v)){
+            UNION(u, v)
+            A <- A U {(u, v)}
+        }
+    }
+
+    return A
+}
+#+end_src
+
+
+** Complessità
+#+begin_quote
+n (inizializzazione) + mlogm (ordinamento archi) + mlogm (corpo dell'algoritmo)
+@@html:<br>@@
+= O(n + mlogm + mlogm) -> {{{color(red, O(mlogm))}}}
+#+end_quote
+
+** Dimostrazione della correttezza
+#+begin_quote
+L'algoritmo di Kruskal è corretto grazie al [[teorema][teorema fondamentale degli MST]]
+#+end_quote
