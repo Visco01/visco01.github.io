@@ -111,3 +111,5 @@ n (inizializzazione) + mlogm (ordinamento archi) + mlogm (corpo dell'algoritmo)
 #+begin_quote
 L'algoritmo di Kruskal è corretto grazie al [[teorema][teorema fondamentale degli MST]]
 #+end_quote
+
+[[file:../index.org][HOME]]
