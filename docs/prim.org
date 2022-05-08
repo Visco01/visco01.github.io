@@ -55,3 +55,5 @@ n (inizializzazione) + nlogn (estrazione da Q) + 2mlogn (ciclo for + funzione pe
 #+begin_quote
 L'algoritmo di Prim è corretto grazie al [[file:kruskal.org][teorema fondamentale degli MST]]
 #+end_quote
+
+[[file:../index.org][HOME]]

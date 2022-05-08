@@ -56,6 +56,12 @@ e allora dopo la INIT_SS si ha
 d[u] = δ(s, u)
 #+end_quote
 
+** Proprietà della convergenza
+Se d[u] =  δ(s, u):
+#+begin_quote
+La prima RELAX su (u, v) porrà d[v] =  δ(s, v)
+#+end_quote
+
 ** Proprietà del grafo dei predecessori
 Se alla fine di un algoritmo che usa RELAX si ha:
 #+begin_quote
@@ -77,6 +83,8 @@ Dato (u, v) ∈ E
 G = grafo
 w = funzione peso
 s = nodo sorgente
+
+PREREQUISITI: i pesi devono essere positivi e non possono esserci cicli negativi.
 ,*/
 DIJKSTRA(G, w, s){
     INIT_SS(G, s)
@@ -140,6 +148,15 @@ e a sua volta *d[u] = δ(s, u) + w(u, v)*
 e di conseguenza *d[u] < δ(s, u)*, che è assurdo
 @@html:<br>@@
 C.V.D
+#+end_quote
+
+* Teorema di Djikstra
+#+begin_quote
+Sia G = (V, E), w: E -> R, w(u, v) >= 0.
+@@html:<br>@@
+Alla fine dell'algoritmo di Dijkstra si avra:
+1) *d[u] = δ(s, u)*
+2) Gπ è un *albero di cammini minimi*
 #+end_quote
 
 [[file:../index.org][HOME]]
