@@ -8,3 +8,4 @@ Spero di non doverlo rifare
 ** [[file:docs/kruskal.org][MST e algoritmo di Kruskal]]
 ** [[file:docs/prim.org][Algoritmo di Prim]]
 ** [[file:docs/dijkstra.org][Algoritmo di Djikstra]]
+** [[file:docs/bellman_ford.org][Algoritmo di Bellman-Ford]]
