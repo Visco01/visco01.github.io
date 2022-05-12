@@ -9,3 +9,4 @@ Spero di non doverlo rifare
 ** [[file:docs/prim.org][Algoritmo di Prim]]
 ** [[file:docs/dijkstra.org][Algoritmo di Djikstra]]
 ** [[file:docs/bellman_ford.org][Algoritmo di Bellman-Ford]]
+** [[file:docs/floyd_warshall.org][Algoritmo di Floyd-Warshall]]

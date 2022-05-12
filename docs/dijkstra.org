@@ -159,4 +159,20 @@ Alla fine dell'algoritmo di Dijkstra si avra:
 2) Gπ è un *albero di cammini minimi*
 #+end_quote
 
+* Cammino minimo tra tutte le coppie di nodi
+#+begin_src cpp
+ITERATED_DIJKSTRA(G, w){
+    for each u in V[G]
+        DIJKSTRA(G, w, u)
+}
+#+end_src
+
+* Confronto tra gli algoritmi
+
+| algorithm         | SPARSO        | DENSO         |
+|-------------------+---------------+---------------|
+| IT_DIJKSTRA array | O(n^3)        | O(n^3)        |
+| IT_DIJKSTRA heap  | O(n^2 * logn) | O(n^3 * logn) |
+| IT_BF             | O(n^3)        | O(n^4)        |
+
 [[file:../index.org][HOME]]
