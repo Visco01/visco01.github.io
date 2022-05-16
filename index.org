@@ -4,6 +4,7 @@
 Spero di non doverlo rifare
 
 * Modulo 2
+** [[file:docs/countingsort.org][Counting Sort]]
 ** [[file:docs/definizioni.org][Definizioni generali sui grafi]]
 ** [[file:docs/kruskal.org][MST e algoritmo di Kruskal]]
 ** [[file:docs/prim.org][Algoritmo di Prim]]
