@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <title>MST e Algoritmo di Kruskal</title>
-<!-- 2022-05-08 Sun 12:22 -->
+<!-- 2022-05-18 Wed 21:49 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="generator" content="Org-mode">
@@ -189,6 +189,32 @@ $(function() {
     $('.bs-docs-sidebar').affix();
 });
 </script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  displayAlign: "center",
+  displayIndent: "2em",
+  messageStyle: "none",
+  "HTML-CSS": {
+    scale: 100,
+    styles: {
+      ".MathJax_Display": {
+        "font-size": "100%"
+      }
+    }
+  },
+  "SVG": {
+    scale: 100,
+    styles: {
+      ".MathJax_SVG_Display": {
+        "font-size": "100%",
+        "margin-left": "-2.281em"
+      }
+    }
+  }
+});
+</script>
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_SVG"></script>
 </head>
 <body>
 <div id="content" class="container">
@@ -227,20 +253,20 @@ Uno Spanning Tree è uno MST se il peso del suddetto albero è minimo tra tutti 
 <div class="outline-text-2" id="text-2">
 <div class="org-src-container">
 
-<pre class="src src-cpp"><span style="color: #a89984;">/*</span>
-<span style="color: #a89984;">G = grafo</span>
-<span style="color: #a89984;">w = funzione peso</span>
-<span style="color: #a89984;">*/</span>
-<span style="color: #8f3f71;">GENERIC</span>-<span style="color: #8f3f71;">MST</span><span style="color: #076678;">(</span>G, w<span style="color: #076678;">){</span>
-    A &lt;- <span style="color: #8f3f71;">NIL</span>
+<pre class="src src-cpp"><span style="color: #928374;">/*</span>
+<span style="color: #928374;">G = grafo</span>
+<span style="color: #928374;">w = funzione peso</span>
+<span style="color: #928374;">*/</span>
+<span style="color: #d3869b;">GENERIC</span>-<span style="color: #d3869b;">MST</span><span style="color: #fe8019;">(</span>G, w<span style="color: #fe8019;">){</span>
+    A &lt;- <span style="color: #d3869b;">NIL</span>
 
-    <span style="color: #9d0006;">while</span><span style="color: #b16286;">(</span>|A| &lt; |V| - <span style="color: #8f3f71; font-weight: bold;">1</span><span style="color: #b16286;">){</span>
-        Trova un arco sicuro <span style="color: #8f3f71;">per</span> <span style="color: #076678;">A</span> <span style="color: #8ec07c;">(</span>u, v<span style="color: #8ec07c;">)</span>
-        A &lt;- A U <span style="color: #8ec07c;">{</span><span style="color: #d65d0e;">(</span>u, v<span style="color: #d65d0e;">)</span><span style="color: #8ec07c;">}</span>
-    <span style="color: #b16286;">}</span>
+    <span style="color: #fb4934;">while</span><span style="color: #cc241d;">(</span>|A| &lt; |V| - <span style="color: #d3869b; font-weight: bold;">1</span><span style="color: #cc241d;">){</span>
+        Trova un arco sicuro <span style="color: #fabd2f;">per</span> <span style="color: #83a598;">A</span> <span style="color: #b8bb26;">(</span>u, v<span style="color: #b8bb26;">)</span>
+        A &lt;- A U <span style="color: #b8bb26;">{</span><span style="color: #83a598;">(</span>u, v<span style="color: #83a598;">)</span><span style="color: #b8bb26;">}</span>
+    <span style="color: #cc241d;">}</span>
 
-    <span style="color: #9d0006;">return</span> A
-<span style="color: #076678;">}</span>
+    <span style="color: #fb4934;">return</span> A
+<span style="color: #fe8019;">}</span>
 </pre>
 </div>
 </div>
@@ -252,13 +278,15 @@ Uno Spanning Tree è uno MST se il peso del suddetto albero è minimo tra tutti 
 <div class="outline-text-2" id="text-3">
 <blockquote>
 <p>
+<font color="red"> Enunciato</font>
+<br>
 Sia G = (V, E, w) un grafo non orientato, pesato e connesso.
 Siano:
 </p>
 <ol class="org-ol">
 <li>A sottoinsieme di E contenuto in qualche MST
 </li>
-<li>(S, V-s) taglio rispetto ad A (nessuno degli archi di A attraversa il taglio)
+<li>(S, V\s) taglio rispetto ad A (nessuno degli archi di A attraversa il taglio)
 </li>
 <li>(u, v) ∈ E è un arco leggero che attraversa il taglio
 </li>
@@ -268,6 +296,51 @@ Siano:
 <b>Allora, l&rsquo;arco (u, v) è sicuro per A.</b>
 <br>
 A U {(u, v)} è contenuto in qualche MST.
+<br>
+<br>
+<font color="red"> Dimostrazione</font>
+<br>
+Sia T sottoinsieme di E un MST che contenga A.
+<br>
+</p>
+<ul class="org-ul">
+<li>Se (u, v) ∈ T &#x2013;&gt; Fine in quanto <b>A U {(u, v)} sottoinsieme di T<sub>MST</sub></b>
+</li>
+<li>Se (u, v) ∉ T:
+</li>
+</ul>
+
+<p>
+<font color="red"> Metodo del cuci e taglia</font>
+<br>
+Sia <b>T&rsquo; = T U {(u, v)} \ {(x, y)}</b> &#x2013;&gt; Viene aggiunto l&rsquo;arco da esaminare e tolto un qualsiasi arco (x, y) dall&rsquo;insieme.
+<br>
+<font color="red"> T' è un MST?</font> Se si riesce a dimostrare, allora la dimostrazione è finita.
+<br>
+</p>
+<ol class="org-ol">
+<li><b>T&rsquo; è uno spanning tree</b> &#x2013;&gt; Ovvio per Ipotesi.
+</li>
+<li><b>W(T&rsquo;) = W(T) &#x2013;&gt; T&rsquo; è MST</b>, in quanto:
+<ul class="org-ul">
+<li>W(T) &lt;= W(T&rsquo;) perchè T è MST.
+</li>
+<li>W(T&rsquo;) &lt;= W(T) perchè <b>W(T&rsquo;) = W(T) + w(u, v) - w(x, y) = W(T) + (numero &lt;= 0)</b> in quanto w(u, v) è leggero.
+</li>
+</ul>
+</li>
+<li><b>A U {(u, v)} sottoinsieme di T&rsquo; (MST)</b>
+<ul class="org-ul">
+<li>A sottoinsieme di T&rsquo; &#x2013;&gt; per Ipotesi (b)
+</li>
+<li>(u, v) ∈ T&rsquo; per costruzione
+</li>
+</ul>
+</li>
+</ol>
+<p>
+<br>
+CVD
 </p>
 </blockquote>
 </div>
@@ -279,11 +352,11 @@ A U {(u, v)} è contenuto in qualche MST.
 <div class="outline-text-2" id="text-4">
 <div class="org-src-container">
 
-<pre class="src src-cpp"><span style="color: #8f3f71;">MAKE_SET</span><span style="color: #076678;">(</span>x<span style="color: #076678;">)</span> -&gt; <span style="color: #9d0006;">return</span> <span style="color: #076678;">{</span>X<span style="color: #076678;">}</span>
+<pre class="src src-cpp"><span style="color: #d3869b;">MAKE_SET</span><span style="color: #fe8019;">(</span>x<span style="color: #fe8019;">)</span> -&gt; <span style="color: #fb4934;">return</span> <span style="color: #fe8019;">{</span>X<span style="color: #fe8019;">}</span>
 
-<span style="color: #8f3f71;">UNION</span><span style="color: #076678;">(</span>x, y<span style="color: #076678;">)</span> -&gt; Sx U Sy
+<span style="color: #d3869b;">UNION</span><span style="color: #fe8019;">(</span>x, y<span style="color: #fe8019;">)</span> -&gt; Sx U Sy
 
-<span style="color: #8f3f71;">FIND_SET</span><span style="color: #076678;">(</span>x<span style="color: #076678;">)</span> -&gt; <span style="color: #9d0006;">return</span> rappresentante dell<span style="color: #af3a03;">'</span>insieme che contiene x
+<span style="color: #d3869b;">FIND_SET</span><span style="color: #fe8019;">(</span>x<span style="color: #fe8019;">)</span> -&gt; <span style="color: #fb4934;">return</span> rappresentante dell<span style="color: #fabd2f;">'</span>insieme che contiene x
 </pre>
 </div>
 </div>
@@ -295,20 +368,20 @@ A U {(u, v)} è contenuto in qualche MST.
 <div class="outline-text-2" id="text-5">
 <div class="org-src-container">
 
-<pre class="src src-cpp"><span style="color: #a89984;">/*</span>
-<span style="color: #a89984;">G = grafo</span>
-<span style="color: #a89984;">*/</span>
-<span style="color: #b57614;">CONNECTED_COMPONENTS</span><span style="color: #076678;">(</span>G<span style="color: #076678;">){</span>
-    <span style="color: #9d0006;">for</span> each v in V<span style="color: #b16286;">[</span>G<span style="color: #b16286;">]{</span>
-        <span style="color: #8f3f71;">MAKE_SET</span><span style="color: #8ec07c;">(</span>v<span style="color: #8ec07c;">)</span>
-    <span style="color: #b16286;">}</span>
+<pre class="src src-cpp"><span style="color: #928374;">/*</span>
+<span style="color: #928374;">G = grafo</span>
+<span style="color: #928374;">*/</span>
+<span style="color: #b8bb26;">CONNECTED_COMPONENTS</span><span style="color: #fe8019;">(</span>G<span style="color: #fe8019;">){</span>
+    <span style="color: #fb4934;">for</span> each v in V<span style="color: #cc241d;">[</span>G<span style="color: #cc241d;">]{</span>
+        <span style="color: #d3869b;">MAKE_SET</span><span style="color: #b8bb26;">(</span>v<span style="color: #b8bb26;">)</span>
+    <span style="color: #cc241d;">}</span>
 
-    <span style="color: #9d0006;">for</span> each <span style="color: #b16286;">(</span>u, v<span style="color: #b16286;">)</span> <span style="color: #8f3f71;">in</span> <span style="color: #076678;">E</span><span style="color: #b16286;">[</span>G<span style="color: #b16286;">]{</span>
-        <span style="color: #9d0006;">if</span><span style="color: #8ec07c;">(</span><span style="color: #8f3f71;">FIND_SET</span><span style="color: #d65d0e;">(</span>u<span style="color: #d65d0e;">)</span> != <span style="color: #8f3f71;">FIND_SET</span><span style="color: #d65d0e;">(</span>v<span style="color: #d65d0e;">)</span><span style="color: #8ec07c;">){</span>
-            <span style="color: #8f3f71;">UNION</span><span style="color: #d65d0e;">(</span>u, v<span style="color: #d65d0e;">)</span>
-        <span style="color: #8ec07c;">}</span>
-    <span style="color: #b16286;">}</span>
-<span style="color: #076678;">}</span>
+    <span style="color: #fb4934;">for</span> each <span style="color: #cc241d;">(</span>u, v<span style="color: #cc241d;">)</span> <span style="color: #fabd2f;">in</span> <span style="color: #83a598;">E</span><span style="color: #cc241d;">[</span>G<span style="color: #cc241d;">]{</span>
+        <span style="color: #fb4934;">if</span><span style="color: #b8bb26;">(</span><span style="color: #d3869b;">FIND_SET</span><span style="color: #83a598;">(</span>u<span style="color: #83a598;">)</span> != <span style="color: #d3869b;">FIND_SET</span><span style="color: #83a598;">(</span>v<span style="color: #83a598;">)</span><span style="color: #b8bb26;">){</span>
+            <span style="color: #d3869b;">UNION</span><span style="color: #83a598;">(</span>u, v<span style="color: #83a598;">)</span>
+        <span style="color: #b8bb26;">}</span>
+    <span style="color: #cc241d;">}</span>
+<span style="color: #fe8019;">}</span>
 </pre>
 </div>
 </div>
@@ -320,30 +393,30 @@ A U {(u, v)} è contenuto in qualche MST.
 <div class="outline-text-2" id="text-6">
 <div class="org-src-container">
 
-<pre class="src src-cpp"><span style="color: #a89984;">/*</span>
-<span style="color: #a89984;">G = grafo</span>
-<span style="color: #a89984;">w = funzione peso</span>
-<span style="color: #a89984;">*/</span>
-<span style="color: #8f3f71;">MST</span>-<span style="color: #8f3f71;">KRUSKAL</span><span style="color: #076678;">(</span>G, w<span style="color: #076678;">){</span>
-    <span style="color: #a89984;">//</span><span style="color: #a89984;">INIZIALIZZAZIONE</span>
-    A &lt;- <span style="color: #8f3f71;">NIL</span>
-    <span style="color: #9d0006;">for</span> each u in V<span style="color: #b16286;">[</span>G<span style="color: #b16286;">]{</span>
-        <span style="color: #8f3f71;">MAKE_SET</span><span style="color: #8ec07c;">(</span>u<span style="color: #8ec07c;">)</span>
-    <span style="color: #b16286;">}</span>
+<pre class="src src-cpp"><span style="color: #928374;">/*</span>
+<span style="color: #928374;">G = grafo</span>
+<span style="color: #928374;">w = funzione peso</span>
+<span style="color: #928374;">*/</span>
+<span style="color: #d3869b;">MST</span>-<span style="color: #d3869b;">KRUSKAL</span><span style="color: #fe8019;">(</span>G, w<span style="color: #fe8019;">){</span>
+    <span style="color: #928374;">//</span><span style="color: #928374;">INIZIALIZZAZIONE</span>
+    A &lt;- <span style="color: #d3869b;">NIL</span>
+    <span style="color: #fb4934;">for</span> each u in V<span style="color: #cc241d;">[</span>G<span style="color: #cc241d;">]{</span>
+        <span style="color: #d3869b;">MAKE_SET</span><span style="color: #b8bb26;">(</span>u<span style="color: #b8bb26;">)</span>
+    <span style="color: #cc241d;">}</span>
 
-    <span style="color: #a89984;">//</span><span style="color: #a89984;">ORDINAMENTO DEI PESI IN ORDINE NON DECRESCENTE</span>
-    <span style="color: #8f3f71;">SORT</span><span style="color: #b16286;">(</span>E<span style="color: #8ec07c;">[</span>G<span style="color: #8ec07c;">]</span><span style="color: #b16286;">)</span>
+    <span style="color: #928374;">//</span><span style="color: #928374;">ORDINAMENTO DEI PESI IN ORDINE NON DECRESCENTE</span>
+    <span style="color: #d3869b;">SORT</span><span style="color: #cc241d;">(</span>E<span style="color: #b8bb26;">[</span>G<span style="color: #b8bb26;">]</span><span style="color: #cc241d;">)</span>
 
-    <span style="color: #a89984;">//</span><span style="color: #a89984;">CODICE SIMILE A CONNECTED_COMPONENTS</span>
-    <span style="color: #9d0006;">for</span> each <span style="color: #b16286;">(</span>u, v<span style="color: #b16286;">)</span> <span style="color: #8f3f71;">in</span> <span style="color: #076678;">E</span><span style="color: #b16286;">[</span>G<span style="color: #b16286;">]{</span>
-        <span style="color: #9d0006;">if</span><span style="color: #8ec07c;">(</span><span style="color: #8f3f71;">FIND_SET</span><span style="color: #d65d0e;">(</span>u<span style="color: #d65d0e;">)</span> != <span style="color: #8f3f71;">FIND_SET</span><span style="color: #d65d0e;">(</span>v<span style="color: #d65d0e;">)</span><span style="color: #8ec07c;">){</span>
-            <span style="color: #8f3f71;">UNION</span><span style="color: #d65d0e;">(</span>u, v<span style="color: #d65d0e;">)</span>
-            A &lt;- A U <span style="color: #d65d0e;">{</span><span style="color: #076678;">(</span>u, v<span style="color: #076678;">)</span><span style="color: #d65d0e;">}</span>
-        <span style="color: #8ec07c;">}</span>
-    <span style="color: #b16286;">}</span>
+    <span style="color: #928374;">//</span><span style="color: #928374;">CODICE SIMILE A CONNECTED_COMPONENTS</span>
+    <span style="color: #fb4934;">for</span> each <span style="color: #cc241d;">(</span>u, v<span style="color: #cc241d;">)</span> <span style="color: #fabd2f;">in</span> <span style="color: #83a598;">E</span><span style="color: #cc241d;">[</span>G<span style="color: #cc241d;">]{</span>
+        <span style="color: #fb4934;">if</span><span style="color: #b8bb26;">(</span><span style="color: #d3869b;">FIND_SET</span><span style="color: #83a598;">(</span>u<span style="color: #83a598;">)</span> != <span style="color: #d3869b;">FIND_SET</span><span style="color: #83a598;">(</span>v<span style="color: #83a598;">)</span><span style="color: #b8bb26;">){</span>
+            <span style="color: #d3869b;">UNION</span><span style="color: #83a598;">(</span>u, v<span style="color: #83a598;">)</span>
+            A &lt;- A U <span style="color: #83a598;">{</span><span style="color: #fe8019;">(</span>u, v<span style="color: #fe8019;">)</span><span style="color: #83a598;">}</span>
+        <span style="color: #b8bb26;">}</span>
+    <span style="color: #cc241d;">}</span>
 
-    <span style="color: #9d0006;">return</span> A
-<span style="color: #076678;">}</span>
+    <span style="color: #fb4934;">return</span> A
+<span style="color: #fe8019;">}</span>
 </pre>
 </div>
 </div>
@@ -380,7 +453,7 @@ L&rsquo;algoritmo di Kruskal è corretto grazie al <a href="#teorema">teorema fo
 </div></div></div>
 <footer id="postamble" class="">
 <div><p class="author">Author: Pietro Visconti</p>
-<p class="date">Created: 2022-05-08 Sun 12:22</p>
+<p class="date">Created: 2022-05-18 Wed 21:49</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 28.0.91 (<a href="http://orgmode.org">Org-mode</a> 9.6)</p>
 </div>
 </footer>

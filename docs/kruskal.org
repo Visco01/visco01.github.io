@@ -30,15 +30,41 @@ GENERIC-MST(G, w){
 
 ** Teorema fondamentale degli MST<<teorema>>
 #+begin_quote
+{{{color(red, Enunciato)}}}
+@@html:<br>@@
 Sia G = (V, E, w) un grafo non orientato, pesato e connesso.
 Siano:
-1) A sottoinsieme di E contenuto in qualche MST
-2) (S, V-s) taglio rispetto ad A (nessuno degli archi di A attraversa il taglio)
-3) (u, v) ∈ E è un arco leggero che attraversa il taglio
+a) A sottoinsieme di E contenuto in qualche MST
+b) (S, V\s) taglio rispetto ad A (nessuno degli archi di A attraversa il taglio)
+c) (u, v) ∈ E è un arco leggero che attraversa il taglio
 
 *Allora, l'arco (u, v) è sicuro per A.*
 @@html:<br>@@
 A U {(u, v)} è contenuto in qualche MST.
+@@html:<br>@@
+@@html:<br>@@
+{{{color(red, Dimostrazione)}}}
+@@html:<br>@@
+Sia T sottoinsieme di E un MST che contenga A.
+@@html:<br>@@
+- Se (u, v) ∈ T --> Fine in quanto *A U {(u, v)} sottoinsieme di T_MST*
+- Se (u, v) ∉ T:
+
+{{{color(red, Metodo del cuci e taglia)}}}
+@@html:<br>@@
+Sia *T' = T U {(u, v)} \ {(x, y)}* --> Viene aggiunto l'arco da esaminare e tolto un qualsiasi arco (x, y) dall'insieme.
+@@html:<br>@@
+{{{color(red, T' è un MST?)}}} Se si riesce a dimostrare, allora la dimostrazione è finita.
+@@html:<br>@@
+1) *T' è uno spanning tree* --> Ovvio per Ipotesi.
+2) *W(T') = W(T) --> T' è MST*, in quanto:
+   - W(T) <= W(T') perchè T è MST.
+   - W(T') <= W(T) perchè *W(T') = W(T) + w(u, v) - w(x, y) = W(T) + (numero <= 0)* in quanto w(u, v) è leggero.
+3) *A U {(u, v)} sottoinsieme di T' (MST)*
+   - A sottoinsieme di T' --> per Ipotesi (b)
+   - (u, v) ∈ T' per costruzione
+@@html:<br>@@
+CVD
 #+end_quote
 
 
