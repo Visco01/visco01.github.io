@@ -122,6 +122,43 @@ n (inizializzazione) + nlogn (extract_min) + mlogn (relax + ribilanciamento dell
 
 * Dimostrazione della correttezza
 
+#+begin_quote
+Sia G = (V, E), w: E -> R, w(u, v) >= 0,
+s è il nodo sorgente.
+@@html:<br>@@
+Alla fine dell'algoritmo di Dijkstra si avra:
+1) *d[u] = δ(s, u)*
+2) Gπ è un *albero di cammini minimi*
+
+{{{color(red, Dimostrazione)}}}:
+∀ u ∈ V, d[u] = δ(s, u) dopo aver estratto il nodo u.
+@@html:<br>@@
+*PER ASSURDO*: Esiste u ∈ V tale che d[u] != δ(s, u) e u sia il primo vertice per cui questo accade.
+@@html:<br>@@
+1) u != s -> d[s] = δ(s, s)
+2) Al momento dell'estrazione di u, S != NIL (s ∈ S)
+3) Esiste un cammino minimo tra s e u, in cui almeno un arco (x, y) attraversa il taglio (S, V \ S)
+4) δ(s, u) = +inf = d[u] (fine)
+5) Esiste cammino minimo tra s e u
+6) d[x] = δ(s, x) per ipotesi
+7) d[y] = δ(s, y) per proprietà dela convergenza
+8) d[u] <= d[y] per Dijkstra
+9) δ(s, y) < δ(s, u) perche i pesi degli archi sono sempre maggiori di 0
+10) δ(s, u) <= d[u] per proprietà del limite inferiore
+
+*DI CONSEGUENZA*:
+@@html:<br>@@
+- δ(s, u) <= d[u]
+-         <= d[y]
+-         = δ(s, y)
+-         <= δ(s, u)
+
+
+{{{color(red, d[u] = δ(s u) è ASSURDO)}}}
+
+#+end_quote
+
+#+begin_comment
 Sempre vera dopo la INIT_SS:
 #+begin_quote
 Se u != s  -->  d[u] = +inf  -->  δ(s, s) = -inf
@@ -135,6 +172,8 @@ Se u == s  -->  d[s] = 0  -->  δ(s, s) = 0
 *PER ASSURDO*:
     Esiste v ∈ V tale che dopo una RELAX
     *d[v] < δ(s, v)*
+    @@html:<br>@@
+    e che questa sia la prima RELAX che viola la proprietà
 @@html:<br>@@
 @@html:<br>@@
 Dopo la RELAX(u, v, w(u, v)) abbiamo che
@@ -149,15 +188,7 @@ e di conseguenza *d[u] < δ(s, u)*, che è assurdo
 @@html:<br>@@
 C.V.D
 #+end_quote
-
-* Teorema di Djikstra
-#+begin_quote
-Sia G = (V, E), w: E -> R, w(u, v) >= 0.
-@@html:<br>@@
-Alla fine dell'algoritmo di Dijkstra si avra:
-1) *d[u] = δ(s, u)*
-2) Gπ è un *albero di cammini minimi*
-#+end_quote
+#+end_comment
 
 * Cammino minimo tra tutte le coppie di nodi
 #+begin_src cpp
