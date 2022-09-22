@@ -39,8 +39,8 @@
       });
 
       var firstAccess =
-        "Welcome in LB OS.\r\n\r\nUse 'help' to show a list of available commands.\r\n";
-      var startString = "\x1B[1;3;31mluca-bergantin: ~ $\x1B[0m ";
+          "Welcome in Visco OS. Here you can find a description of my professional and \r\npersonal life!\r\n\r\nUse 'help' to show a list of available commands.\r\n";
+      var startString = "\x1B[1;3;31mvisco-os: ~ $\x1B[0m ";
       var curr_line = "";
 
       var themeLight = {
@@ -90,40 +90,53 @@
       function parseCommand(command) {
         term.write("\r\n");
         switch (command) {
-          case "help":
-            printHelp();
-            break;
-          case "clear":
-            term.clear();
-            curr_line = "";
-            break;
-          case "projects":
-            listProjects();
-            break;
-          case "contacts":
-            printContacts();
-            break;
-          case "theme light":
-            setTheme("light");
-            break;
-          case "theme dark":
-            setTheme("dark");
-            break;
-          default:
-            term.write(
-              "Command '" +
-                command +
-                "' not recognized.\r\nUse 'help' to show a list of available commands.\r\n"
-            );
-            break;
+        case "help":
+          printHelp();
+          break;
+        case "clear":
+          term.clear();
+          curr_line = "";
+          break;
+        case "projects":
+          listProjects();
+          break;
+        case "contacts":
+          printContacts();
+          break;
+        case "skills":
+          printSkills();
+          break;
+        case "education":
+          printEducation();
+          break;
+        case "work_experience":
+          printWorkExperience();
+          break;
+        case "theme light":
+          setTheme("light");
+          break;
+        case "theme dark":
+          setTheme("dark");
+          break;
+        default:
+          term.write(
+            "Command '" +
+              command +
+              "' not recognized.\r\nUse 'help' to show a list of available commands.\r\n"
+          );
+          break;
         }
       }
 
       function printHelp() {
         term.write("Use one of a command listed below" + "\r\n\r\n");
-        term.write("projects" + "\r\n");
         term.write("contacts" + "\r\n");
+        term.write("education" + "\r\n");
+        term.write("work_experience" + "\r\n");
+        term.write("projects" + "\r\n");
+        term.write("skills" + "\r\n");
         term.write("theme {light|dark}" + "\r\n");
+        term.write("\r\n");
       }
 
       function setTheme(style) {
@@ -147,16 +160,43 @@
       }
 
       function printContacts() {
-        term.write("eMail: luca.bergantin.04@gmail.com" + "\r\n");
-        term.write("Github: https://github.com/hexpl0it" + "\r\n");
+        term.write("\r\n");
+        term.write("eMail: pietro.visconti2001@gmail.com" + "\r\n");
+        term.write("Github: https://github.com/Visco01" + "\r\n");
+        term.write("LinkedIn: https://www.linkedin.com/in/pietro-visconti-6618a7169/" + "\r\n");
+        term.write("\r\n");
       }
 
       function listProjects() {
-        term.write("FattEleToDanea" + "\r\n");
-        term.write("FattureInCloudUploader" + "\r\n");
-        term.write("Marino" + "\r\n");
-        term.write("LabelPrinter" + "\r\n");
-        term.write("EasyB&B" + "\r\n");
+        term.write("\r\n");
+        term.write("- MasterPlan Analyzer: a useful tool for organising your life" + "\r\n");
+        term.write("- Diamond Emacs: a new Emacs custom configuration written from scratch with my \r\nfriends" + "\r\n");
+        term.write("- DAISGram: allows you to apply simple filters to images" + "\r\n");
+        term.write("- Esse3 API: an API that makes you interact with the esse3 service for your \r\nuniversity" + "\r\n");
+        term.write("- Visco's Kong: a game written in java inspired by the famous Donkey Kong" + "\r\n");
+        term.write("- ScaldaPanche website: a forum focused on basketball (no longer available >_< )" + "\r\n\r\n");
+      }
+
+      function printSkills() {
+        term.write("\r\n");
+        term.write("- Languages: C, C++, Ruby, Elisp, Java, C#, Javascript, Python, SQL, PHP" + "\r\n");
+        term.write("- Frameworks / Libraries: JQuery, Ruby on Rails, Bootstrap, React, Flask, Django" + "\r\n");
+        term.write("- Other tools: Git, Emacs, Docker" + "\r\n");
+        term.write("- Languages: italian (native), english (medium)" + "\r\n");
+        term.write("\r\n");
+      }
+
+      function printEducation() {
+        term.write("\r\n");
+        term.write("- Bachelor's degree in computer science, Ca' Foscari university. 2020 - present" + "\r\n");
+        term.write("- Diploma in Information Technologies, ITT Enrico Fermi. 2015 - 2020" + "\r\n\r\n");
+      }
+
+      function printWorkExperience() {
+        term.write("\r\n");
+        term.write("- IT Junior Developer at Web Nubes S.r.l (Mestre, VE). Jul 2021 - Feb 2022" + "\r\n");
+        term.write("- Internship at Previnet S.p.a (Preganziol, TV). Jul 2020 - Sep 2020" + "\r\n");
+        term.write("- Internship at Zetaelle S.r.l (Mestre, VE). Jun 2019 - Jul 2019" + "\r\n\r\n");
       }
     </script>
   </body>
