@@ -1,265 +1,163 @@
-<!doctype html>
-<html lang="en">
-<head>
-<title>Algoritmi e Strutture Dati</title>
-<!-- 2022-05-23 Mon 11:16 -->
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="generator" content="Org-mode">
-<meta name="author" content="Pietro Visconti">
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="node_modules/xterm/css/xterm.css" />
+    <script src="node_modules/xterm/lib/xterm.js"></script>
+    <script src="node_modules/xterm-addon-web-links/lib/xterm-addon-web-links.js"></script>
+    <script src="node_modules/xterm-addon-fit/lib/xterm-addon-fit.js"></script>
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
+  </head>
+  <body>
+    <div id="os-loader" class="container noshadow">
+      <div class="center dark">
+        <div class="ls-logo dark"></div>
+        <div class="progress-bar dark">
+          <span class="bar">
+            <span class="progress dark"></span>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div id="os" style="display: none" class="container">
+      <div class="fakeMenu">
+        <div class="fakeButtons fakeClose"></div>
+        <div class="fakeButtons fakeMinimize"></div>
+        <div class="fakeButtons fakeZoom"></div>
+      </div>
+      <div id="terminal" class="fakeScreen"></div>
+    </div>
+    <script>
+      var term = new Terminal();
+      const animated = document.querySelector(".progress");
 
-<link  href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script>
-<style>
-/* org mode styles on top of twbs */
+      animated.addEventListener("animationend", () => {
+        loadTerminal();
+        $("#os-loader").hide();
+        $("#os").show();
+        setTheme("light");
+      });
 
-html {
-    position: relative;
-    min-height: 100%;
-}
+      var firstAccess =
+        "Welcome in LB OS.\r\n\r\nUse 'help' to show a list of available commands.\r\n";
+      var startString = "\x1B[1;3;31mluca-bergantin: ~ $\x1B[0m ";
+      var curr_line = "";
 
-body {
-    font-size: 18px;
-    margin-bottom: 105px;
-}
+      var themeLight = {
+        background: "#d8d8d8",
+        foreground: "#000000",
+        cursor: "#000000",
+      };
+      var themeDark = {
+        background: "#151515",
+        foreground: "#d8d8d8",
+        cursor: "#d8d8d8",
+      };
 
-footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 101px;
-    background-color: #f5f5f5;
-}
+      function loadTerminal() {
+        term.loadAddon(new WebLinksAddon.WebLinksAddon());
+        var fitAddon = new FitAddon.FitAddon();
+        term.loadAddon(fitAddon);
+        term.setOption("theme", themeDark);
+        term.setOption("cursorBlink", true);
+        term.open(document.getElementById("terminal"));
+        fitAddon.fit();
+        term.write(firstAccess);
+        term.write(startString);
+        term.onData((data) => {
+          const code = data.charCodeAt(0);
+          if (code == 13) {
+            // CR
+            parseCommand(curr_line);
+            term.write(startString);
+            curr_line = "";
+          } else if (code == 127) {
+            if (curr_line) {
+              curr_line = curr_line.slice(0, curr_line.length - 1);
+              term.write("\b \b");
+            }
+            return;
+          } else if (code < 32) {
+            return;
+          } else {
+            // Visible
+            term.write(data);
+            curr_line += data;
+          }
+        });
+      }
 
-footer > div {
-    padding: 10px;
-}
+      function parseCommand(command) {
+        term.write("\r\n");
+        switch (command) {
+          case "help":
+            printHelp();
+            break;
+          case "clear":
+            term.clear();
+            curr_line = "";
+            break;
+          case "projects":
+            listProjects();
+            break;
+          case "contacts":
+            printContacts();
+            break;
+          case "theme light":
+            setTheme("light");
+            break;
+          case "theme dark":
+            setTheme("dark");
+            break;
+          default:
+            term.write(
+              "Command '" +
+                command +
+                "' not recognized.\r\nUse 'help' to show a list of available commands.\r\n"
+            );
+            break;
+        }
+      }
 
-footer p {
-    margin: 0 0 5px;
-    text-align: center;
-    font-size: 16px;
-}
+      function printHelp() {
+        term.write("Use one of a command listed below" + "\r\n\r\n");
+        term.write("projects" + "\r\n");
+        term.write("contacts" + "\r\n");
+        term.write("theme {light|dark}" + "\r\n");
+      }
 
-#table-of-contents {
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
+      function setTheme(style) {
+        $(document.body).removeClass("dark");
+        $(document.body).removeClass("light");
+        $(document.body).addClass(style);
 
-blockquote p {
-    font-size: 18px;
-}
+        $(".fakeMenu").removeClass("dark");
+        $(".fakeMenu").removeClass("light");
+        $(".fakeMenu").addClass(style);
 
-pre {
-    font-size: 16px;
-}
+        $(".fakeScreen").removeClass("dark");
+        $(".fakeScreen").removeClass("light");
+        $(".fakeScreen").addClass(style);
 
-.footpara {
-    display: inline-block;
-}
+        if (style == "dark") {
+          term.setOption("theme", themeDark);
+        } else {
+          term.setOption("theme", themeLight);
+        }
+      }
 
-figcaption {
-  font-size: 16px;
-  color: #666;
-  font-style: italic;
-  padding-bottom: 15px;
-}
+      function printContacts() {
+        term.write("eMail: luca.bergantin.04@gmail.com" + "\r\n");
+        term.write("Github: https://github.com/hexpl0it" + "\r\n");
+      }
 
-/* from twbs docs */
-
-.bs-docs-sidebar.affix {
-    position: static;
-}
-@media (min-width: 768px) {
-    .bs-docs-sidebar {
-        padding-left: 20px;
-    }
-}
-
-/* All levels of nav */
-.bs-docs-sidebar .nav > li > a {
-    display: block;
-    padding: 4px 20px;
-    font-size: 14px;
-    font-weight: 500;
-    color: #999;
-}
-.bs-docs-sidebar .nav > li > a:hover,
-.bs-docs-sidebar .nav > li > a:focus {
-    padding-left: 19px;
-    color: #A1283B;
-    text-decoration: none;
-    background-color: transparent;
-    border-left: 1px solid #A1283B;
-}
-.bs-docs-sidebar .nav > .active > a,
-.bs-docs-sidebar .nav > .active:hover > a,
-.bs-docs-sidebar .nav > .active:focus > a {
-    padding-left: 18px;
-    font-weight: bold;
-    color: #A1283B;
-    background-color: transparent;
-    border-left: 2px solid #A1283B;
-}
-
-/* Nav: second level (shown on .active) */
-.bs-docs-sidebar .nav .nav {
-    display: none; /* Hide by default, but at >768px, show it */
-    padding-bottom: 10px;
-}
-.bs-docs-sidebar .nav .nav > li > a {
-    padding-top: 1px;
-    padding-bottom: 1px;
-    padding-left: 30px;
-    font-size: 12px;
-    font-weight: normal;
-}
-.bs-docs-sidebar .nav .nav > li > a:hover,
-.bs-docs-sidebar .nav .nav > li > a:focus {
-    padding-left: 29px;
-}
-.bs-docs-sidebar .nav .nav > .active > a,
-.bs-docs-sidebar .nav .nav > .active:hover > a,
-.bs-docs-sidebar .nav .nav > .active:focus > a {
-    padding-left: 28px;
-    font-weight: 500;
-}
-
-/* Nav: third level (shown on .active) */
-.bs-docs-sidebar .nav .nav .nav {
-    padding-bottom: 10px;
-}
-.bs-docs-sidebar .nav .nav .nav > li > a {
-    padding-top: 1px;
-    padding-bottom: 1px;
-    padding-left: 40px;
-    font-size: 12px;
-    font-weight: normal;
-}
-.bs-docs-sidebar .nav .nav .nav > li > a:hover,
-.bs-docs-sidebar .nav .nav .nav > li > a:focus {
-    padding-left: 39px;
-}
-.bs-docs-sidebar .nav .nav .nav > .active > a,
-.bs-docs-sidebar .nav .nav .nav > .active:hover > a,
-.bs-docs-sidebar .nav .nav .nav > .active:focus > a {
-    padding-left: 38px;
-    font-weight: 500;
-}
-
-/* Show and affix the side nav when space allows it */
-@media (min-width: 992px) {
-    .bs-docs-sidebar .nav > .active > ul {
-        display: block;
-    }
-    /* Widen the fixed sidebar */
-    .bs-docs-sidebar.affix,
-    .bs-docs-sidebar.affix-bottom {
-        width: 213px;
-    }
-    .bs-docs-sidebar.affix {
-        position: fixed; /* Undo the static from mobile first approach */
-        top: 20px;
-    }
-    .bs-docs-sidebar.affix-bottom {
-        position: absolute; /* Undo the static from mobile first approach */
-    }
-    .bs-docs-sidebar.affix .bs-docs-sidenav,.bs-docs-sidebar.affix-bottom .bs-docs-sidenav {
-        margin-top: 0;
-        margin-bottom: 0
-    }
-}
-@media (min-width: 1200px) {
-    /* Widen the fixed sidebar again */
-    .bs-docs-sidebar.affix-bottom,
-    .bs-docs-sidebar.affix {
-        width: 263px;
-    }
-}
-</style>
-<script>
-$(function() {
-    'use strict';
-
-    $('.bs-docs-sidebar li').first().addClass('active');
-
-    $(document.body).scrollspy({target: '.bs-docs-sidebar'});
-
-    $('.bs-docs-sidebar').affix();
-});
-</script>
-</head>
-<body>
-<div id="content" class="container">
-<div class="row"><div class="col-md-3 col-md-push-9"><nav id="table-of-contents">
-<div id="text-table-of-contents" class="bs-docs-sidebar">
-<ul class="nav">
-<li><a href="#sec-1">1. Modulo 1</a></li>
-<li><a href="#sec-2">2. Modulo 2</a>
-<ul class="nav">
-<li><a href="#sec-2-1">2.1. Counting Sort</a></li>
-<li><a href="#sec-2-2">2.2. Radix Sort</a></li>
-<li><a href="#sec-2-3">2.3. Definizioni generali sui grafi</a></li>
-<li><a href="#sec-2-4">2.4. MST e algoritmo di Kruskal</a></li>
-<li><a href="#sec-2-5">2.5. Algoritmo di Prim</a></li>
-<li><a href="#sec-2-6">2.6. Algoritmo di Djikstra</a></li>
-<li><a href="#sec-2-7">2.7. Algoritmo di Bellman-Ford</a></li>
-<li><a href="#sec-2-8">2.8. Algoritmo di Floyd-Warshall</a></li>
-<li><a href="#sec-2-9">2.9. Algoritmi greedy</a></li>
-</ul>
-</li>
-</ul>
-</div>
-</nav>
-</div><div class="col-md-9 col-md-pull-3"><h1 class="title">Algoritmi e Strutture Dati</h1>
-
-<div id="outline-container-sec-1" class="outline-2">
-<h2 id="sec-1"><span class="section-number-2">1</span> Modulo 1</h2>
-<div class="outline-text-2" id="text-1">
-<p>
-Spero di non doverlo rifare
-</p>
-</div>
-</div>
-
-<div id="outline-container-sec-2" class="outline-2">
-<h2 id="sec-2"><span class="section-number-2">2</span> Modulo 2</h2>
-<div class="outline-text-2" id="text-2">
-</div><div id="outline-container-sec-2-1" class="outline-3">
-<h3 id="sec-2-1"><span class="section-number-3">2.1</span> <a href="docs/countingsort.html">Counting Sort</a></h3>
-</div>
-<div id="outline-container-sec-2-2" class="outline-3">
-<h3 id="sec-2-2"><span class="section-number-3">2.2</span> <a href="docs/radixsort.html">Radix Sort</a></h3>
-</div>
-<div id="outline-container-sec-2-3" class="outline-3">
-<h3 id="sec-2-3"><span class="section-number-3">2.3</span> <a href="docs/definizioni.html">Definizioni generali sui grafi</a></h3>
-</div>
-<div id="outline-container-sec-2-4" class="outline-3">
-<h3 id="sec-2-4"><span class="section-number-3">2.4</span> <a href="docs/kruskal.html">MST e algoritmo di Kruskal</a></h3>
-</div>
-<div id="outline-container-sec-2-5" class="outline-3">
-<h3 id="sec-2-5"><span class="section-number-3">2.5</span> <a href="docs/prim.html">Algoritmo di Prim</a></h3>
-</div>
-<div id="outline-container-sec-2-6" class="outline-3">
-<h3 id="sec-2-6"><span class="section-number-3">2.6</span> <a href="docs/dijkstra.html">Algoritmo di Djikstra</a></h3>
-</div>
-<div id="outline-container-sec-2-7" class="outline-3">
-<h3 id="sec-2-7"><span class="section-number-3">2.7</span> <a href="docs/bellman_ford.html">Algoritmo di Bellman-Ford</a></h3>
-</div>
-<div id="outline-container-sec-2-8" class="outline-3">
-<h3 id="sec-2-8"><span class="section-number-3">2.8</span> <a href="docs/floyd_warshall.html">Algoritmo di Floyd-Warshall</a></h3>
-</div>
-<div id="outline-container-sec-2-9" class="outline-3">
-<h3 id="sec-2-9"><span class="section-number-3">2.9</span> <a href="docs/greedy.html">Algoritmi greedy</a></h3>
-</div>
-</div>
-</div></div></div>
-<footer id="postamble" class="">
-<div><p class="author">Author: Pietro Visconti</p>
-<p class="date">Created: 2022-05-23 Mon 11:16</p>
-<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 28.0.91 (<a href="http://orgmode.org">Org-mode</a> 9.6)</p>
-</div>
-</footer>
-</body>
+      function listProjects() {
+        term.write("FattEleToDanea" + "\r\n");
+        term.write("FattureInCloudUploader" + "\r\n");
+        term.write("Marino" + "\r\n");
+        term.write("LabelPrinter" + "\r\n");
+        term.write("EasyB&B" + "\r\n");
+      }
+    </script>
+  </body>
 </html>
