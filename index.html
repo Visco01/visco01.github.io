@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <title>Visco OS</title>
     <link rel="shortcut icon" type="image/png" href="assets/foxhound.png">
     <link rel="stylesheet" href="style.css" />
@@ -9,199 +10,204 @@
     <script src="node_modules/xterm-addon-web-links/lib/xterm-addon-web-links.js"></script>
     <script src="node_modules/xterm-addon-fit/lib/xterm-addon-fit.js"></script>
     <script src="node_modules/jquery/dist/jquery.min.js"></script>
-  </head>
-  <body>
+</head>
+
+<body>
     <div id="os-loader" class="container noshadow">
-      <div class="center dark">
-        <div class="ls-logo dark"></div>
-        <div class="progress-bar dark">
-          <span class="bar">
-            <span class="progress dark"></span>
-          </span>
+        <div class="center dark">
+            <div class="ls-logo dark"></div>
+            <div class="progress-bar dark">
+                <span class="bar">
+                    <span class="progress dark"></span>
+                </span>
+            </div>
         </div>
-      </div>
     </div>
     <div id="os" style="display: none" class="container">
-      <div class="fakeMenu">
-        <div class="fakeButtons fakeClose"></div>
-        <div class="fakeButtons fakeMinimize"></div>
-        <div class="fakeButtons fakeZoom"></div>
-      </div>
-      <div id="terminal" class="fakeScreen"></div>
+        <div class="fakeMenu">
+            <div class="fakeButtons fakeClose"></div>
+            <div class="fakeButtons fakeMinimize"></div>
+            <div class="fakeButtons fakeZoom"></div>
+        </div>
+        <div id="terminal" class="fakeScreen"></div>
     </div>
     <script>
-      var term = new Terminal();
-      const animated = document.querySelector(".progress");
+        var term = new Terminal();
+        const animated = document.querySelector(".progress");
 
-      animated.addEventListener("animationend", () => {
-        loadTerminal();
-        $("#os-loader").hide();
-        $("#os").show();
-        setTheme("light");
-      });
-
-      var firstAccess =
-          "Welcome in Visco OS. Here you can find a description of my professional and \r\npersonal life!\r\n\r\nUse 'help' to show a list of available commands.\r\n";
-      var startString = "\x1B[1;3;31mvisco-os: ~ $\x1B[0m ";
-      var curr_line = "";
-
-      var themeLight = {
-        background: "#d8d8d8",
-        foreground: "#000000",
-        cursor: "#000000",
-      };
-      var themeDark = {
-        background: "#151515",
-        foreground: "#d8d8d8",
-        cursor: "#d8d8d8",
-      };
-
-      function loadTerminal() {
-        term.loadAddon(new WebLinksAddon.WebLinksAddon());
-        var fitAddon = new FitAddon.FitAddon();
-        term.loadAddon(fitAddon);
-        term.setOption("theme", themeDark);
-        term.setOption("cursorBlink", true);
-        term.open(document.getElementById("terminal"));
-        fitAddon.fit();
-        term.write(firstAccess);
-        term.write(startString);
-        term.onData((data) => {
-          const code = data.charCodeAt(0);
-          if (code == 13) {
-            // CR
-            parseCommand(curr_line);
-            term.write(startString);
-            curr_line = "";
-          } else if (code == 127) {
-            if (curr_line) {
-              curr_line = curr_line.slice(0, curr_line.length - 1);
-              term.write("\b \b");
-            }
-            return;
-          } else if (code < 32) {
-            return;
-          } else {
-            // Visible
-            term.write(data);
-            curr_line += data;
-          }
+        animated.addEventListener("animationend", () => {
+            loadTerminal();
+            $("#os-loader").hide();
+            $("#os").show();
+            setTheme("light");
         });
-      }
 
-      function parseCommand(command) {
-        term.write("\r\n");
-        switch (command) {
-        case "help":
-          printHelp();
-          break;
-        case "clear":
-          term.clear();
-          curr_line = "";
-          break;
-        case "projects":
-          listProjects();
-          break;
-        case "contacts":
-          printContacts();
-          break;
-        case "skills":
-          printSkills();
-          break;
-        case "education":
-          printEducation();
-          break;
-        case "work_experience":
-          printWorkExperience();
-          break;
-        case "theme light":
-          setTheme("light");
-          break;
-        case "theme dark":
-          setTheme("dark");
-          break;
-        default:
-          term.write(
-            "Command '" +
-              command +
-              "' not recognized.\r\nUse 'help' to show a list of available commands.\r\n"
-          );
-          break;
+        var firstAccess =
+            "Welcome in Visco OS. Here you can find a description of my professional and \r\npersonal life!\r\n\r\nUse 'help' to show the list of available commands.\r\n";
+        var startString = "\x1B[1;3;31mvisco-os: ~ $\x1B[0m ";
+        var curr_line = "";
+
+        var themeLight = {
+            background: "#d8d8d8",
+            foreground: "#000000",
+            cursor: "#000000",
+        };
+        var themeDark = {
+            background: "#151515",
+            foreground: "#d8d8d8",
+            cursor: "#d8d8d8",
+        };
+
+        function loadTerminal() {
+            term.loadAddon(new WebLinksAddon.WebLinksAddon());
+            var fitAddon = new FitAddon.FitAddon();
+            term.loadAddon(fitAddon);
+            term.setOption("theme", themeDark);
+            term.setOption("cursorBlink", true);
+            term.open(document.getElementById("terminal"));
+            fitAddon.fit();
+            term.write(firstAccess);
+            term.write(startString);
+            term.onData((data) => {
+                const code = data.charCodeAt(0);
+                if (code == 13) {
+                    // CR
+                    parseCommand(curr_line);
+                    term.write(startString);
+                    curr_line = "";
+                } else if (code == 127) {
+                    if (curr_line) {
+                        curr_line = curr_line.slice(0, curr_line.length - 1);
+                        term.write("\b \b");
+                    }
+                    return;
+                } else if (code < 32) {
+                    return;
+                } else {
+                    // Visible
+                    term.write(data);
+                    curr_line += data;
+                }
+            });
         }
-      }
 
-      function printHelp() {
-        term.write("Use one of a command listed below" + "\r\n\r\n");
-        term.write("contacts" + "\r\n");
-        term.write("education" + "\r\n");
-        term.write("work_experience" + "\r\n");
-        term.write("projects" + "\r\n");
-        term.write("skills" + "\r\n");
-        term.write("theme {light|dark}" + "\r\n");
-        term.write("\r\n");
-      }
-
-      function setTheme(style) {
-        $(document.body).removeClass("dark");
-        $(document.body).removeClass("light");
-        $(document.body).addClass(style);
-
-        $(".fakeMenu").removeClass("dark");
-        $(".fakeMenu").removeClass("light");
-        $(".fakeMenu").addClass(style);
-
-        $(".fakeScreen").removeClass("dark");
-        $(".fakeScreen").removeClass("light");
-        $(".fakeScreen").addClass(style);
-
-        if (style == "dark") {
-          term.setOption("theme", themeDark);
-        } else {
-          term.setOption("theme", themeLight);
+        function parseCommand(command) {
+            term.write("\r\n");
+            switch (command) {
+                case "help":
+                    printHelp();
+                    break;
+                case "clear":
+                    term.clear();
+                    curr_line = "";
+                    break;
+                case "projects":
+                    listProjects();
+                    break;
+                case "contacts":
+                    printContacts();
+                    break;
+                case "skills":
+                    printSkills();
+                    break;
+                case "education":
+                    printEducation();
+                    break;
+                case "work_experience":
+                    printWorkExperience();
+                    break;
+                case "theme light":
+                    setTheme("light");
+                    break;
+                case "theme dark":
+                    setTheme("dark");
+                    break;
+                default:
+                    term.write(
+                        "Command '" +
+                        command +
+                        "' doesn't exist.\r\nUse 'help' to show the list of available commands.\r\n"
+                    );
+                    break;
+            }
         }
-      }
 
-      function printContacts() {
-        term.write("\r\n");
-        term.write("eMail: pietro.visconti2001@gmail.com" + "\r\n");
-        term.write("Github: https://github.com/Visco01" + "\r\n");
-        term.write("LinkedIn: https://www.linkedin.com/in/pietro-visconti-6618a7169/" + "\r\n");
-        term.write("\r\n");
-      }
+        function printHelp() {
+            term.write("Use one of the commands listed below" + "\r\n\r\n");
+            term.write("contacts" + "\r\n");
+            term.write("education" + "\r\n");
+            term.write("work_experience" + "\r\n");
+            term.write("projects" + "\r\n");
+            term.write("skills" + "\r\n");
+            term.write("theme {light|dark}" + "\r\n");
+            term.write("\r\n");
+        }
 
-      function listProjects() {
-        term.write("\r\n");
-        term.write("- MyLocalBooking Android app: it allows users to provide and/or reserve\r\n  establishments like sport fields, apartments, various places and so on" + "\r\n");
-        term.write("- MyLocalBooking API: Web service written in Ruby on Rails to support\r\n  MyLocalBooking app (interaction with remote database)" + "\r\n");
-        term.write("- MasterPlan Analyzer: a useful tool that helps you to organize your week" + "\r\n");
-        term.write("- Diamond Emacs: a new Emacs custom configuration written from scratch with my \r\n  friends" + "\r\n");
-        term.write("- DAISGram: allows you to apply simple filters to images" + "\r\n");
-        term.write("- Esse3 API: an API that makes you interact with the esse3 service for your \r\n  university" + "\r\n");
-        term.write("- Visco's Kong: a game written in java inspired by the famous Donkey Kong" + "\r\n");
-        term.write("- ScaldaPanche website: a forum focused on basketball (no longer available >_< )" + "\r\n\r\n");
-      }
+        function setTheme(style) {
+            $(document.body).removeClass("dark");
+            $(document.body).removeClass("light");
+            $(document.body).addClass(style);
 
-      function printSkills() {
-        term.write("\r\n");
-        term.write("- Languages: C, C++, Ruby, Elisp, Java, C#, Javascript, Python, SQL, PHP" + "\r\n");
-        term.write("- Frameworks / Libraries: JQuery, Ruby on Rails, Bootstrap, React, Flask, Django" + "\r\n");
-        term.write("- Other tools: Git, Emacs, Docker" + "\r\n");
-        term.write("- Languages: italian (native), english (medium)" + "\r\n");
-        term.write("\r\n");
-      }
+            $(".fakeMenu").removeClass("dark");
+            $(".fakeMenu").removeClass("light");
+            $(".fakeMenu").addClass(style);
 
-      function printEducation() {
-        term.write("\r\n");
-        term.write("- Bachelor's degree in computer science, Ca' Foscari university. 2020 - present" + "\r\n");
-        term.write("- Diploma in Information Technologies, ITT Enrico Fermi. 2015 - 2020" + "\r\n\r\n");
-      }
+            $(".fakeScreen").removeClass("dark");
+            $(".fakeScreen").removeClass("light");
+            $(".fakeScreen").addClass(style);
 
-      function printWorkExperience() {
-        term.write("\r\n");
-        term.write("- Software developer at Web Nubes S.r.l (Mestre, VE). Jul 2021 - Feb 2022" + "\r\n");
-        term.write("- Software developer internship at Previnet S.p.a (Preganziol, TV).\r\n  Jul 2020 - Sep 2020" + "\r\n");
-        term.write("- Internship at Zetaelle S.r.l (Mestre, VE). Jun 2019 - Jul 2019" + "\r\n\r\n");
-      }
+            if (style == "dark") {
+                term.setOption("theme", themeDark);
+            } else {
+                term.setOption("theme", themeLight);
+            }
+        }
+
+        function printContacts() {
+            term.write("\r\n");
+            term.write("eMail: pietro.visconti2001@gmail.com" + "\r\n");
+            term.write("Github: https://github.com/Visco01" + "\r\n");
+            term.write("LinkedIn: https://www.linkedin.com/in/pietro-visconti-6618a7169/" + "\r\n");
+            term.write("\r\n");
+        }
+
+        function listProjects() {
+            term.write("\r\n");
+            term.write("- GTFS Stops clustering: A ruby gem to read GTFS stops data and create clusters\r\n  based on coordinates and stop names' similarities." + "\r\n");
+            term.write("- JustEaTime: a full-stack web application to manage the orders of a restaurant.\r\n  REST-style backend webservice, implemented in TypeScript and running on NodeJS" + "\r\n");
+            term.write("- MyLocalBooking Android app: it allows users to provide and/or reserve\r\n  establishments like sport fields, apartments, various places and so on" + "\r\n");
+            term.write("- MyLocalBooking API: Web service written in Ruby on Rails to support\r\n  MyLocalBooking app (interaction with remote database)" + "\r\n");
+            term.write("- MasterPlan Analyzer: a useful tool that helps you to organize your week plan" + "\r\n");
+            term.write("- Diamond Emacs: a new Emacs custom configuration written from scratch with my \r\n  friends" + "\r\n");
+            term.write("- DAISGram: allows you to apply simple filters to images" + "\r\n");
+            term.write("- Esse3 API: an API that makes you interact with the esse3 service for your \r\n  university" + "\r\n");
+        }
+
+        function printSkills() {
+            term.write("\r\n");
+            term.write("- Languages: C, C++, Ruby, Java, Javascript/Typescript, Python, HTML/CSS, Perl" + "\r\n");
+            term.write("- Databases: Postgres SQL, MySQL, MongoDB" + "\r\n");
+            term.write("- Tools: Git/GitHub, Unix Shell, Docker, IntelliJ, Emacs, Redis" + "\r\n");
+            term.write("- Frameworks: Ruby on Rails, Spring Boot, Flask, Angular, NodeJS" + "\r\n");
+            term.write("- Languages: italian (native), english (B2)" + "\r\n");
+            term.write("\r\n");
+        }
+
+        function printEducation() {
+            term.write("\r\n");
+            term.write("- M.Sc in Software Engineering, Ca' Foscari University. 2023 - current" + "\r\n");
+            term.write("- B.Sc in Computer Science, Ca' Foscari University. 2020 - 2023, 95/110" + "\r\n");
+            term.write("- High School Diploma in Information Technologies, ITT Enrico Fermi. 2015 - 2020" + "\r\n\r\n");
+        }
+
+        function printWorkExperience() {
+            term.write("\r\n");
+            term.write("- Backend developer internship at NTT DATA (Treviso, TV). Mar 2023 - Jan 2024" + "\r\n");
+            term.write("- Software developer at Web Nubes S.r.l (Mestre, VE). Jul 2021 - Feb 2022" + "\r\n");
+            term.write("- Software developer internship at Previnet S.p.a (Preganziol, TV).\r\n  Jul 2020 - Sep 2020" + "\r\n");
+            term.write("- Internship at Zetaelle S.r.l (Mestre, VE). Jun 2019 - Jul 2019" + "\r\n\r\n");
+        }
     </script>
-  </body>
+</body>
+
 </html>
